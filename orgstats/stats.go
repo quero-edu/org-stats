@@ -81,7 +81,21 @@ func Gather(
 			&allStats,
 			since,
 		); err != nil {
-			return Stats{}, err
+			// await 5 minutes and retry
+			fmt.Printf("failed to gather review stats for user %s, waiting 2 minutes and retrying: %v", user, err)
+			time.Sleep(5 * time.Minute)
+			if err := gatherReviewStats(
+				ctx,
+				client,
+				org,
+				user,
+				userBlacklist,
+				repoBlacklist,
+				&allStats,
+				since,
+			); err != nil {
+				return Stats{}, err
+			}
 		}
 	}
 
