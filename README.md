@@ -1,68 +1,28 @@
 # org-stats
 
-[![Release](https://img.shields.io/github/release/caarlos0/org-stats.svg?style=for-the-badge)](https://github.com/caarlos0/org-stats/releases/latest)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=for-the-badge)](/LICENSE.md)
-[![Build status](https://img.shields.io/github/actions/workflow/status/caarlos0/org-stats/build.yml?style=for-the-badge)](https://github.com/caarlos0/org-stats/actions?workflow=build)
-[![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=for-the-badge)](http://godoc.org/github.com/caarlos0/org-stats)
-[![Powered By: GoReleaser](https://img.shields.io/badge/powered%20by-goreleaser-green.svg?style=for-the-badge)](https://github.com/goreleaser)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=for-the-badge)](https://conventionalcommits.org)
+Esse repositório é um fork do [caarlos0/org-stats](https://github.com/caarlos0/org-stats).
 
-Get the contributor stats summary from all repos of any given organization
+Ao rodar o script original, ele não consegue finalizar a execução, 
+isso porque a nossa organização é muito grande e o script não consegue lidar corretamente com o rate limit do github.
 
-## screenshots
+A solução que conseguimos aqui não parece ser a ideal mas funciona muito bem para o nosso caso
+(principalmente pela falta de experiência com go), por isso
+optamos pelo fork ao invés de abrir um PR no repositório original.
 
-<p align="center">
-  <img width="49%" alt="image" src="https://user-images.githubusercontent.com/245435/125717673-163da857-3456-4b98-ab66-29f5bc61e7cf.png">
-  <img width="49%" alt="image" src="https://user-images.githubusercontent.com/245435/125717683-821e13cc-3b2f-4c4d-9032-b69eb26bf5c6.png">
-</p>
+## Rodando o script
 
+Para rodar o script o seu usuário precisa ter acesso a todos os repositórios da organização.
 
-## usage
+Então você vai precisar gerar o token de acesso do github com as permissões `Full control of private repositories`.
 
-Check the [docs folder](/docs/org-stats.md).
+Com o token em mãos, basta buildar a imagem docker e executar o container:
 
-## install
-
-### macOS
-
-```sh
-brew install caarlos0/tap/org-stats
+```bash
+docker build -t quero-edu/org-stats .
 ```
 
-### linux
-
-#### snap
-
-```sh
-snap install org-stats
+```bash
+docker run -it -e GITHUB_TOKEN=SEU_TOKEN quero-edu/org-stats
 ```
 
-#### apt
-
-```sh
-echo 'deb [trusted=yes] https://apt.fury.io/caarlos0/ /' | sudo tee /etc/apt/sources.list.d/caarlos0.list
-sudo apt update
-sudo apt install org-stats
-```
-
-#### yum
-
-```sh
-echo '[caarlos0]
-name=caarlos0
-baseurl=https://yum.fury.io/caarlos0/
-enabled=1
-gpgcheck=0' | sudo tee /etc/yum.repos.d/caarlos0.repo
-sudo yum install org-stats
-```
-
-#### arch linux
-
-```sh
-yay -S org-stats-bin
-```
-
-## stargazers over time
-
-[![Stargazers over time](https://starchart.cc/caarlos0/org-stats.svg)](https://starchart.cc/caarlos0/org-stats)
-
+O script vai demorar alguns bons minutos para rodar, mas no final ele vai gerar a saida via stdout
