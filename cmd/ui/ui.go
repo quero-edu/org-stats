@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 	"time"
 
 	"github.com/caarlos0/org-stats/csv"
@@ -87,7 +86,7 @@ func (m InitialModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.err = msg.error
 		return m, nil
 	case gotResults:
-		log.Println("got results", len(msg.stats.Logins()), "logins")
+		fmt.Println("got results", len(msg.stats.Logins()), "logins")
 		highlights := NewHighlightsModel(msg.stats, m.top, m.includeReviewStats)
 		return highlights, tea.Batch(
 			writeCsv(m.csv, msg.stats, m.includeReviewStats),

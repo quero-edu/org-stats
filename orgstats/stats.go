@@ -3,7 +3,6 @@ package orgstats
 import (
 	"context"
 	"fmt"
-	"log"
 	"strings"
 	"time"
 
@@ -65,7 +64,7 @@ func Gather(
 		return Stats{}, err
 	}
 
-	log.Println("total authors stats:", len(allStats.data))
+	fmt.Println("total authors stats:", len(allStats.data))
 
 	if !includeReviewStats {
 		return allStats, nil
@@ -112,7 +111,7 @@ func search(
 	client *github.Client,
 	query string,
 ) (int, error) {
-	log.Printf("searching '%s'", query)
+	fmt.Printf("searching '%s'", query)
 	result, _, err := client.Search.Issues(ctx, query, &github.SearchOptions{
 		ListOptions: github.ListOptions{
 			PerPage: 1,
@@ -146,11 +145,11 @@ func gatherLineStats(
 
 	for _, repo := range allRepos {
 		if excludeForks && *repo.Fork {
-			log.Println("ignoring forked repo:", repo.GetName())
+			fmt.Println("ignoring forked repo:", repo.GetName())
 			continue
 		}
 		if isBlacklisted(repoBlacklist, repo.GetName()) {
-			log.Println("ignoring blacklisted repo:", repo.GetName())
+			fmt.Println("ignoring blacklisted repo:", repo.GetName())
 			continue
 		}
 		stats, serr := getStats(ctx, client, org, *repo.Name)
@@ -159,10 +158,10 @@ func gatherLineStats(
 		}
 		for _, cs := range stats {
 			if isBlacklisted(userBlacklist, cs.Author.GetLogin()) {
-				log.Println("ignoring blacklisted author:", cs.Author.GetLogin())
+				fmt.Println("ignoring blacklisted author:", cs.Author.GetLogin())
 				continue
 			}
-			log.Println("recording stats for author", cs.Author.GetLogin(), "on repo", repo.GetName())
+			fmt.Println("recording stats for author", cs.Author.GetLogin(), "on repo", repo.GetName())
 			allStats.add(cs)
 		}
 	}
@@ -231,7 +230,7 @@ func repos(ctx context.Context, client *github.Client, org string) ([]*github.Re
 		opt.ListOptions.Page = resp.NextPage
 	}
 
-	log.Println("got", len(allRepos), "repositories")
+	fmt.Println("got", len(allRepos), "repositories")
 	return allRepos, nil
 }
 
@@ -254,6 +253,6 @@ func handleRateLimit(err *github.RateLimitError) {
 	if s < 0 {
 		s = 5 * time.Second
 	}
-	log.Printf("hit rate limit, waiting %v", s)
+	fmt.Printf("hit rate limit, waiting %v", s)
 	time.Sleep(s)
 }
